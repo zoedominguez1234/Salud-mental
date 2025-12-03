@@ -289,6 +289,7 @@
 
         .hero-highlight {
             background: linear-gradient(120deg, #60a5fa, #a5b4fc, #38bdf8);
+            background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
         }
@@ -2636,5 +2637,42 @@
             irASlide(0);
         });
     </script>
+
+<!-- FIXED SCRIPTS -->
+<script>
+// simple carousel fix: ensure next/prev work
+document.addEventListener('DOMContentLoaded', ()=>{
+  const track=document.getElementById('carouselTrack');
+  if(track){
+    const slides=track.querySelectorAll('.carousel-slide');
+    let index=0;
+    const update=()=>{track.style.transform=`translateX(-${index*100}%)`;};
+    const prev=document.getElementById('prevSlide');
+    const next=document.getElementById('nextSlide');
+    if(prev) prev.onclick=()=>{index=(index-1+slides.length)%slides.length;update();};
+    if(next) next.onclick=()=>{index=(index+1)%slides.length;update();};
+  }
+  // questionnaire
+  const form=document.getElementById('quizForm');
+  const res=document.getElementById('resultadoGeneral');
+  const list=document.getElementById('listaResultados');
+  if(form && res && list){
+    window.procesarCuestionario=()=>{
+      const qs=form.querySelectorAll('.quiz-question');
+      let score=0;let count=0;
+      qs.forEach(q=>{
+        const sel=q.querySelector('input[type=radio]:checked');
+        if(sel){score+=parseInt(sel.value);count++;}
+      });
+      res.textContent="Resultado aproximado: "+score+" puntos.";
+      list.innerHTML="";
+      const li=document.createElement('li');
+      li.textContent="Evaluación generada correctamente.";
+      list.appendChild(li);
+    };
+  }
+});
+</script>
+
 </body>
 </html>
